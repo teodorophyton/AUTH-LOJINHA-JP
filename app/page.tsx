@@ -22,9 +22,9 @@ export default function HomePage({
           --white: #F0F0F0;
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { min-height: 100vh; background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; overflow-x: hidden; cursor: none; }
-        #cursor { position: fixed; width: 12px; height: 12px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; mix-blend-mode: difference; }
-        #cursor-trail { position: fixed; width: 36px; height: 36px; border: 1.5px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: all 0.15s ease; opacity: 0.5; }
+        html, body { min-height: 100vh; background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+        #cursor { display: none; }
+        #cursor-trail { position: fixed; width: 36px; height: 36px; border: 1.5px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: all 0.08s ease; opacity: 0; }
         .particle { position: absolute; width: 2px; height: 2px; background: var(--gold); border-radius: 50%; opacity: 0; animation: floatUp var(--dur) ease-in infinite; animation-delay: var(--delay); left: var(--x); }
         @keyframes floatUp { 0% { opacity: 0; transform: translateY(100vh) scale(0); } 10% { opacity: 0.6; } 90% { opacity: 0.2; } 100% { opacity: 0; transform: translateY(-20px) scale(1.5); } }
         .bg-grid { position: fixed; inset: 0; background-image: linear-gradient(rgba(245,197,24,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(245,197,24,0.03) 1px, transparent 1px); background-size: 60px 60px; z-index: 0; pointer-events: none; }
@@ -138,24 +138,17 @@ export default function HomePage({
       </div>
 
       <script dangerouslySetInnerHTML={{ __html: `
-        const cursor = document.getElementById('cursor');
         const trail = document.getElementById('cursor-trail');
         const bgGlow = document.getElementById('bg-glow');
-        let mx=window.innerWidth/2,my=window.innerHeight/2,tx=window.innerWidth/2,ty=window.innerHeight/2;
-        
-        // Posicionar cursor no centro inicialmente
-        cursor.style.left=mx+'px'; cursor.style.top=my+'px';
-        cursor.style.opacity='0';
+        let mx=0,my=0,tx=0,ty=0;
         
         document.addEventListener('mousemove', e => {
           mx=e.clientX; my=e.clientY;
-          cursor.style.left=mx+'px'; cursor.style.top=my+'px';
-          cursor.style.opacity='1';
-          trail.style.opacity='0.5';
+          trail.style.opacity='0.6';
           bgGlow.style.left=(e.clientX/window.innerWidth*100)+'%';
           bgGlow.style.top=(e.clientY/window.innerHeight*100)+'%';
         });
-        function animTrail(){tx+=(mx-tx)*0.12;ty+=(my-ty)*0.12;trail.style.left=tx+'px';trail.style.top=ty+'px';requestAnimationFrame(animTrail);}
+        function animTrail(){tx+=(mx-tx)*0.15;ty+=(my-ty)*0.15;trail.style.left=tx+'px';trail.style.top=ty+'px';requestAnimationFrame(animTrail);}
         animTrail();
         document.querySelectorAll('a,.btn-auth').forEach(el=>{
           el.addEventListener('mouseenter',()=>{cursor.style.width='20px';cursor.style.height='20px';trail.style.width='52px';trail.style.height='52px';});
