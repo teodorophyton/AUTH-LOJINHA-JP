@@ -141,10 +141,17 @@ export default function HomePage({
         const cursor = document.getElementById('cursor');
         const trail = document.getElementById('cursor-trail');
         const bgGlow = document.getElementById('bg-glow');
-        let mx=0,my=0,tx=0,ty=0;
+        let mx=window.innerWidth/2,my=window.innerHeight/2,tx=window.innerWidth/2,ty=window.innerHeight/2;
+        
+        // Posicionar cursor no centro inicialmente
+        cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+        cursor.style.opacity='0';
+        
         document.addEventListener('mousemove', e => {
           mx=e.clientX; my=e.clientY;
           cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+          cursor.style.opacity='1';
+          trail.style.opacity='0.5';
           bgGlow.style.left=(e.clientX/window.innerWidth*100)+'%';
           bgGlow.style.top=(e.clientY/window.innerHeight*100)+'%';
         });
